@@ -64,7 +64,9 @@ class HelperService : AccessibilityService() {
     private var target = ""
     private var reopenAfter = true
 
-    val isBusy: Boolean get() = step != null
+    /** A restart or reboot is under way. Pressing Apple CarPlay / Android Auto afterwards doesn't count: it's quiet
+     *  and stops by itself, so the main screen never waits on it. */
+    val isBusy: Boolean get() = step != null && step != Step.PICK_MODE
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -117,7 +119,8 @@ class HelperService : AccessibilityService() {
     /** After the CarPlay app [pkg] opens, presses its Apple CarPlay or Android Auto button (per "Open it as").
      *  Quiet and best effort: if the button never shows up, it just stops after a while. */
     fun pickMode(pkg: String, delayMs: Long = 1_500) {
-        if (Prefs.openMode(this) == Prefs.MODE_AUTO || step != null) return
+        if (Prefs.openMode(this) == Prefs.MODE_AUTO) return
+        if (step != null && step != Step.PICK_MODE) return // a restart or reboot is under way
         target = pkg
         go(Step.PICK_MODE, delayMs)
     }
@@ -187,8 +190,17 @@ class HelperService : AccessibilityService() {
             Step.REOPEN -> finishRestart()
 
             Step.PICK_MODE -> {
-                val labels = if (Prefs.openMode(this) == Prefs.MODE_CARPLAY) CARPLAY else ANDROID_AUTO
+                val labels = when (Prefs.openMode(this)) {
+                    Prefs.MODE_CARPLAY -> CARPLAY
+                    Prefs.MODE_ANDROID_AUTO -> ANDROID_AUTO
+                    else -> {
+                        stop() // switched back to Auto in the meantime
+                        return
+                    }
+                }
+                // Only a button: never flip a switch or checkbox that happens to be called "CarPlay" (a setting).
                 val button = find(labels, activeWindowOnly = true, onlyPackage = target)
+                    ?.takeUnless { clickableOf(it).isCheckable }
                 when {
                     button != null && tap(button) -> stop()
                     waited > 15_000 -> stop()

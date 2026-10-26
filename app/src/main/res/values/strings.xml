@@ -34,7 +34,6 @@
     <string name="stat_never">None yet</string>
     <string name="stat_worked">Worked</string>
     <string name="stat_failed">Didn’t work</string>
-    <string name="stat_since_midnight">since midnight</string>
     <plurals name="restarts_today">
         <item quantity="one">restart</item>
         <item quantity="other">restarts</item>
@@ -67,7 +66,7 @@
     <string name="setup_step3">Says <b>Restricted setting</b>? Go to Settings › Apps › CarPlay Restart, tap ⋮ at the top, choose <b>Allow restricted settings</b>, then try again.</string>
     <string name="setup_open">Open settings</string>
     <string name="not_now">Not now</string>
-    <string name="helper_description">Lets CarPlay Restart close and reopen your CarPlay app when you press Restart: it opens the app’s App info page, presses Force stop, then opens the app again. When you hold Reboot radio, it opens the power menu and presses Restart. It acts only right after you press one of those buttons, and it doesn’t read, save or send anything else.</string>
+    <string name="helper_description">Lets CarPlay Restart close and reopen your CarPlay app when you press Restart: it opens the app’s App info page, presses Force stop, then opens the app again and, if you picked one in Settings, presses its Apple CarPlay or Android Auto button. When you hold Reboot radio, it opens the power menu and presses Restart. It acts only right after you press one of those buttons, and it doesn’t read, save or send anything else.</string>
 
     <!-- Settings -->
     <string name="back">Back</string>
@@ -77,9 +76,9 @@
     <string name="pick_title">Which app runs CarPlay?</string>
     <string name="no_apps">No apps found.</string>
     <string name="reopen_title">Open it again after restarting</string>
-    <string name="reopen_sub">Turn off to just close it and come back here</string>
+    <string name="reopen_sub">Off: just close it and come back here</string>
     <string name="mode_title">Open it as</string>
-    <string name="mode_sub">Presses that button in the app for you after it opens. Needs the helper on.</string>
+    <string name="mode_sub">Auto lets the app choose. The other two need the helper on: it presses that button for you.</string>
     <string name="mode_auto">Auto</string>
     <string name="mode_carplay">Apple CarPlay</string>
     <string name="mode_android">Android Auto</string>

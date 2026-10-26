@@ -3,6 +3,7 @@ package app.carplayrestart
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.provider.Settings
@@ -33,7 +34,10 @@ object SetupDialog {
         dialog.window?.let { window ->
             window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             val metrics = activity.resources.displayMetrics
-            val width = min((metrics.widthPixels * 0.92f).toInt(), (620 * metrics.density).toInt())
+            // The wide-screen card is two columns, so it can be wider and still short enough for the radio.
+            val landscape = activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            val maxDp = if (landscape) 760 else 620
+            val width = min((metrics.widthPixels * 0.92f).toInt(), (maxDp * metrics.density).toInt())
             window.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
         }
     }

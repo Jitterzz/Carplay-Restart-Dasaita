@@ -120,6 +120,7 @@ class SettingsActivity : Activity() {
         val chosen = Prefs.openMode(this)
         modeChoices.forEachIndexed { mode, view ->
             view.setBackgroundResource(if (mode == chosen) R.drawable.bg_pill_accent else R.drawable.bg_seg_off)
+            view.isSelected = mode == chosen // TalkBack says "selected"
         }
         modeRow.alpha = if (Prefs.reopen(this)) 1f else 0.4f
     }

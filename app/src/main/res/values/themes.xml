@@ -49,8 +49,14 @@
     <!-- One choice in the "Open it as" row; the selected one gets the blue pill background in code. -->
     <style name="ModeChoice">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">42dp</item>
+        <item name="android:layout_height">40dp</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:paddingStart">6dp</item>
+        <item name="android:paddingEnd">6dp</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">10sp</item>
+        <item name="android:autoSizeMaxTextSize">14sp</item>
+        <item name="android:autoSizeStepGranularity">1sp</item>
         <item name="android:background">@drawable/bg_seg_off</item>
         <item name="android:ellipsize">end</item>
         <item name="android:fontFamily">@font/sora_semibold</item>

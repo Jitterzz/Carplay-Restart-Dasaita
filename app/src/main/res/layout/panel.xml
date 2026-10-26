@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Glass cards: the CarPlay app, the live status, today's stats, and Hold to reboot radio.
+<!-- Glass cards: the CarPlay app, the live status, today's stats (two tiles, always the same height), and Hold to reboot radio.
      Shared by the side-by-side (radio) and stacked layouts. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -125,7 +125,7 @@
 
         <app.carplayrestart.GlassLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
             android:padding="11dp"
@@ -154,7 +154,7 @@
 
         <app.carplayrestart.GlassLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:orientation="vertical"

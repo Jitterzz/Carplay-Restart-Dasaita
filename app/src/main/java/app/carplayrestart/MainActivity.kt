@@ -130,7 +130,7 @@ class MainActivity : Activity() {
                         // Let the green "Done" land for a beat, then open a fresh copy.
                         if (reopen) Work.ui(900) {
                             Apps.launchIntent(this, pkg)?.let { safeStart(it) }
-                            helper?.pickMode(pkg) // "Open it as": needs the helper on, root or not
+                            HelperService.instance?.pickMode(pkg) // "Open it as": needs the helper on, root or not
                         }
                     }
                     helper == null -> {
