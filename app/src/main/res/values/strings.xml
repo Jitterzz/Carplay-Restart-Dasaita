@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CarPlay Restart</string>
+    <string name="car_name">DASAITA RADIO</string>
+
+    <!-- The orb -->
+    <string name="orb_description">Restart CarPlay</string>
+    <string name="orb_restart">Restart</string>
+    <string name="orb_sub">CarPlay</string>
+    <string name="orb_working">Restarting</string>
+    <string name="orb_working_sub">Hang tight</string>
+    <string name="orb_done">Done</string>
+    <string name="orb_done_sub">%1$s restarted</string>
+    <string name="orb_error">Try again</string>
+    <string name="orb_error_sub">Didn’t go through</string>
+
+    <!-- Main screen -->
+    <string name="settings">Settings</string>
+    <string name="carplay_app_sub">CarPlay &amp; Android Auto</string>
+    <string name="no_carplay_app">No CarPlay app found</string>
+    <string name="pick_in_settings">Pick it in Settings</string>
+    <string name="pick_first">Pick your CarPlay app first.</string>
+    <string name="status_ready">Ready</string>
+    <string name="status_root_detail">Root access · instant restarts</string>
+    <string name="status_helper_detail">Helper on · it taps Force stop for you</string>
+    <string name="status_checking">Checking…</string>
+    <string name="status_checking_detail">Looking for root access</string>
+    <string name="status_setup">Setup needed</string>
+    <string name="status_setup_detail">Turn on the helper once</string>
+    <string name="set_up">Set up</string>
+    <string name="stat_last">Last restart</string>
+    <string name="stat_today">Today</string>
+    <string name="stat_none">—</string>
+    <string name="stat_never">None yet</string>
+    <string name="stat_worked">Worked</string>
+    <string name="stat_failed">Didn’t work</string>
+    <string name="stat_since_midnight">since midnight</string>
+    <plurals name="restarts_today">
+        <item quantity="one">restart</item>
+        <item quantity="other">restarts</item>
+    </plurals>
+    <string name="hold_idle">Hold to reboot radio</string>
+    <string name="hold_holding">Keep holding…</string>
+    <string name="hold_done">Rebooting…</string>
+    <string name="hold_hint">Press and hold to reboot the radio.</string>
+
+    <!-- Results -->
+    <string name="done_restarted">Restarted %1$s</string>
+    <string name="done_rebooting">Rebooting the radio…</string>
+    <string name="err_no_force_stop">Couldn’t find the Force stop button. Try again, or force stop it in Settings › Apps.</string>
+    <string name="err_no_app_info">This radio wouldn’t open the app’s App info page.</string>
+    <string name="err_no_power_menu">This radio’s power menu didn’t open, so it can’t reboot from here without root.</string>
+    <string name="err_no_settings">Couldn’t open Settings. Open Settings › Accessibility on the radio.</string>
+
+    <!-- Reboot question (only for TalkBack; everyone else holds the button) -->
+    <string name="reboot_title">Reboot the radio?</string>
+    <string name="reboot_message">The screen goes dark for about a minute while it starts back up. Music, calls and CarPlay stop until then.</string>
+    <string name="reboot_yes">Reboot</string>
+
+    <!-- Helper setup -->
+    <string name="the_carplay_app">the CarPlay app</string>
+    <string name="setup_overline">One-time setup</string>
+    <string name="setup_title">Turn on the helper</string>
+    <string name="setup_body">Android won’t let one app close another, so a small helper does the tapping: for Restart it presses Force stop on %1$s and opens it again, and for Reboot it uses the power menu. It only acts right after you press a button.</string>
+    <string name="setup_step1">Tap <b>Open settings</b> below.</string>
+    <string name="setup_step2">Find <b>CarPlay Restart</b> (it can be under Downloaded apps or Installed services) and turn it on.</string>
+    <string name="setup_step3">Says <b>Restricted setting</b>? Go to Settings › Apps › CarPlay Restart, tap ⋮ at the top, choose <b>Allow restricted settings</b>, then try again.</string>
+    <string name="setup_open">Open settings</string>
+    <string name="not_now">Not now</string>
+    <string name="helper_description">Lets CarPlay Restart close and reopen your CarPlay app when you press Restart: it opens the app’s App info page, presses Force stop, then opens the app again. When you hold Reboot radio, it opens the power menu and presses Restart. It acts only right after you press one of those buttons, and it doesn’t read, save or send anything else.</string>
+
+    <!-- Settings -->
+    <string name="back">Back</string>
+    <string name="section_app">CarPlay app</string>
+    <string name="tap_to_pick">Tap to pick it</string>
+    <string name="change">Change</string>
+    <string name="pick_title">Which app runs CarPlay?</string>
+    <string name="no_apps">No apps found.</string>
+    <string name="reopen_title">Open it again after restarting</string>
+    <string name="reopen_sub">Turn off to just close it and come back here</string>
+    <string name="section_how">How it restarts</string>
+    <string name="helper_title">Helper</string>
+    <string name="helper_on">On. It presses Force stop for you when you tap Restart.</string>
+    <string name="helper_off">Off. Needed unless this radio has root.</string>
+    <string name="helper_turn_on">Turn on</string>
+    <string name="helper_manage">Open</string>
+    <string name="root_title">Root</string>
+    <string name="root_yes">Found. Restarts are instant, no helper needed.</string>
+    <string name="root_no">Not on this radio. The helper does the tapping instead.</string>
+    <string name="root_checking">Checking…</string>
+    <string name="version">CarPlay Restart %1$s · David &amp; Dev</string>
+</resources>

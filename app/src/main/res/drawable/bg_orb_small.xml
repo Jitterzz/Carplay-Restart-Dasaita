@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The little orb behind the logo arrow and the setup card's icon. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <gradient
+        android:angle="315"
+        android:centerColor="@color/accent"
+        android:endColor="@color/violet_deep"
+        android:startColor="@color/accent_light" />
+</shape>

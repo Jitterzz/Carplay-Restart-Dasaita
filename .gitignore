@@ -1,0 +1,13 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+captures/
+.kotlin/
+
+# The release key from the repo's secrets is written here during a build: never commit it
+keystore/
+*.jks
+*.keystore
+dist/

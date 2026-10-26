@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The helper looks at the screen only while a restart or reboot is in progress (see HelperService.kt).
+     It needs window content to find the Force stop / OK / Restart buttons, and gestures to tap buttons that
+     don't answer an ordinary click. -->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeWindowStateChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagReportViewIds|flagRetrieveInteractiveWindows|flagIncludeNotImportantViews"
+    android:canPerformGestures="true"
+    android:canRetrieveWindowContent="true"
+    android:description="@string/helper_description"
+    android:notificationTimeout="100"
+    android:settingsActivity="app.carplayrestart.SettingsActivity" />

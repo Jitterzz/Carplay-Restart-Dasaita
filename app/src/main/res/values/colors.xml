@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Night-drive palette: near-black blue, frosted glass, and glowing blue / violet / cyan.
+         Dark all the time: easy on the eyes at night and doesn't glare across the dash. -->
+    <color name="bg">#060912</color>
+    <color name="text_primary">#F5F7FF</color>
+    <color name="text_secondary">#9AA8BF</color>
+    <color name="text_tertiary">#64748B</color>
+    <color name="glass_fill">#12FFFFFF</color>
+    <color name="glass_solid">#F00C1322</color>
+    <color name="hairline">#1FFFFFFF</color>
+
+    <color name="accent">#3B82F6</color>
+    <color name="accent_light">#60A5FA</color>
+    <color name="accent_deep">#1D4ED8</color>
+    <color name="cyan">#22D3EE</color>
+    <color name="violet">#8B5CF6</color>
+    <color name="violet_deep">#6D28D9</color>
+
+    <color name="ok">#34D399</color>
+    <color name="warn">#FBBF24</color>
+    <color name="warn_deep">#F97316</color>
+    <color name="idle">#64748B</color>
+
+    <color name="ripple_light">#33FFFFFF</color>
+    <color name="switch_off_track">#33FFFFFF</color>
+    <color name="switch_off_thumb">#CBD5E1</color>
+</resources>

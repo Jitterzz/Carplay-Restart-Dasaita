@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Frosted-glass cards (GlassLayout.kt). -->
+    <declare-styleable name="GlassLayout">
+        <!-- Corner roundness. -->
+        <attr name="glassRadius" format="dimension" />
+        <!-- The glass itself: see-through by default, nearly solid for dialogs. -->
+        <attr name="glassFill" format="color" />
+        <!-- Tints the edge (green when ready, amber when setup is needed). -->
+        <attr name="glassAccent" format="color" />
+    </declare-styleable>
+</resources>

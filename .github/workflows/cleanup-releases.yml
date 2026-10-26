@@ -1,0 +1,49 @@
+# Deletes old releases so the Releases page only shows the newest build(s).
+# Run it by hand: Actions tab > Clean up old releases > Run workflow.
+#
+# It keeps the newest builds (1 unless you choose more) and deletes the older "build-N" releases
+# and their tags.
+name: Clean up old releases
+
+on:
+  workflow_dispatch:
+    inputs:
+      keep:
+        description: "How many of the newest builds to keep"
+        required: true
+        default: "1"
+
+permissions:
+  contents: write   # lets the job delete this repo's releases and tags
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Delete older releases
+        env:
+          KEEP: ${{ inputs.keep }}
+          REPO_TOKEN: ${{ github.token }}
+        run: |
+          keep=$(printf '%s' "$KEEP" | tr -cd '0-9')
+          [ -n "$keep" ] && [ "$keep" -ge 1 ] || keep=1
+
+          clean() {
+            repo="$1"
+            # Newest first by build number; anything not named build-N is left alone.
+            tags=$(gh release list --repo "$repo" --limit 500 --json tagName --jq '.[].tagName' \
+              | grep -E '^build-[0-9]+$' | sort -t- -k2,2nr || true)
+            n=0
+            for t in $tags; do
+              n=$((n + 1))
+              if [ "$n" -le "$keep" ]; then
+                echo "keep    $repo $t"
+                continue
+              fi
+              gh release delete "$t" --repo "$repo" --yes --cleanup-tag
+              echo "deleted $repo $t"
+            done
+          }
+
+          GH_TOKEN="$REPO_TOKEN" clean "$GITHUB_REPOSITORY"
