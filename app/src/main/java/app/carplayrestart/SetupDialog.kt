@@ -16,7 +16,7 @@ import kotlin.math.min
 object SetupDialog {
 
     fun show(activity: Activity) {
-        if (activity.isFinishing) return
+        if (activity.isFinishing || activity.isDestroyed) return
         val dialog = Dialog(activity, R.style.GlassDialog)
         dialog.setContentView(R.layout.dialog_setup)
 

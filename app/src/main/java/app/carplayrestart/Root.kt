@@ -20,7 +20,8 @@ object Root {
         available?.let { return it }
         val out = run("id", timeoutMs = 15_000)
         val ok = out.ok && out.text.contains("uid=0")
-        available = ok
+        // A timed-out check (e.g. the su prompt answered late) isn't a "no": ask again next time.
+        if (ok || out.text != "timed out") available = ok
         return ok
     }
 

@@ -161,7 +161,7 @@ class HelperService : AccessibilityService() {
 
             Step.CONFIRM_FORCE_STOP -> {
                 // The "Force stop?" question. Its OK button is android:id/button1 on nearly every radio.
-                val ok = findId("android:id/button1") ?: find(OK, activeWindowOnly = true)
+                val ok = findId("android:id/button1", activeWindowOnly = true) ?: find(OK, activeWindowOnly = true)
                 when {
                     ok != null && clickableOf(ok).isEnabled -> {
                         tap(ok)
@@ -188,7 +188,7 @@ class HelperService : AccessibilityService() {
 
             Step.CONFIRM_RESTART -> {
                 // Most radios restart on the first press. Some ask again: press OK, or Restart once more.
-                (findId("android:id/button1") ?: find(RESTART))?.let { tap(it) }
+                (findId("android:id/button1", activeWindowOnly = true) ?: find(RESTART, activeWindowOnly = true))?.let { tap(it) }
                 stop()
                 Outcome.report(this, true, getString(R.string.done_rebooting), restart = false)
             }
@@ -259,8 +259,8 @@ class HelperService : AccessibilityService() {
         return t in labels
     }
 
-    private fun findId(viewId: String): AccessibilityNodeInfo? {
-        for (root in roots(false)) {
+    private fun findId(viewId: String, activeWindowOnly: Boolean = false): AccessibilityNodeInfo? {
+        for (root in roots(activeWindowOnly)) {
             val hits = try {
                 root.findAccessibilityNodeInfosByViewId(viewId)
             } catch (_: Exception) {
