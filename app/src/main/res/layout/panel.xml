@@ -13,18 +13,18 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="14dp"
-        app:glassRadius="22dp">
+        android:padding="10dp"
+        app:glassRadius="20dp">
 
         <FrameLayout
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
             android:background="@drawable/bg_icon_tile">
 
             <ImageView
                 android:id="@+id/app_icon"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_app_placeholder" />
@@ -45,7 +45,7 @@
                 android:fontFamily="@font/sora_bold"
                 android:maxLines="1"
                 android:textColor="@color/text_primary"
-                android:textSize="21sp" />
+                android:textSize="19sp" />
 
             <TextView
                 android:id="@+id/app_sub"
@@ -61,20 +61,20 @@
         android:id="@+id/status_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical"
-        android:minHeight="76dp"
+        android:minHeight="62dp"
         android:orientation="horizontal"
-        android:paddingStart="12dp"
-        android:paddingTop="12dp"
-        android:paddingEnd="14dp"
-        android:paddingBottom="12dp"
-        app:glassRadius="22dp">
+        android:paddingStart="10dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="8dp"
+        app:glassRadius="20dp">
 
         <app.carplayrestart.PulseDot
             android:id="@+id/status_dot"
-            android:layout_width="34dp"
-            android:layout_height="34dp" />
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/sora_semibold"
                 android:textColor="@color/text_primary"
-                android:textSize="19sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/status_detail"
@@ -103,7 +103,7 @@
         <TextView
             android:id="@+id/setup_button"
             android:layout_width="wrap_content"
-            android:layout_height="42dp"
+            android:layout_height="40dp"
             android:layout_marginStart="10dp"
             android:background="@drawable/bg_pill_warm"
             android:fontFamily="@font/sora_semibold"
@@ -120,7 +120,7 @@
         android:id="@+id/stats_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
         <app.carplayrestart.GlassLayout
@@ -128,8 +128,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="14dp"
-            app:glassRadius="20dp">
+            android:padding="11dp"
+            app:glassRadius="18dp">
 
             <TextView
                 style="@style/Overline"
@@ -139,10 +139,10 @@
                 android:id="@+id/last_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="3dp"
                 android:fontFamily="@font/sora_semibold"
                 android:textColor="@color/text_primary"
-                android:textSize="23sp" />
+                android:textSize="21sp" />
 
             <TextView
                 android:id="@+id/last_sub"
@@ -155,11 +155,11 @@
         <app.carplayrestart.GlassLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="14dp"
-            app:glassRadius="20dp">
+            android:padding="11dp"
+            app:glassRadius="18dp">
 
             <TextView
                 style="@style/Overline"
@@ -168,7 +168,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="3dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -177,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sora_semibold"
                     android:textColor="@color/text_primary"
-                    android:textSize="23sp" />
+                    android:textSize="21sp" />
 
                 <TextView
                     android:id="@+id/today_unit"
@@ -188,21 +188,14 @@
                     android:textSize="13sp" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:text="@string/stat_since_midnight"
-                android:textColor="@color/text_tertiary"
-                android:textSize="12sp" />
         </app.carplayrestart.GlassLayout>
     </LinearLayout>
 
     <app.carplayrestart.HoldButton
         android:id="@+id/hold_button"
         android:layout_width="match_parent"
-        android:layout_height="62dp"
-        android:layout_marginTop="12dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="8dp"
         android:contentDescription="@string/hold_idle">
 
         <LinearLayout

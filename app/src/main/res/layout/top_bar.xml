@@ -2,7 +2,7 @@
 <!-- Logo and name on the left; a dashboard clock and the Settings button on the right. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="62dp"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
