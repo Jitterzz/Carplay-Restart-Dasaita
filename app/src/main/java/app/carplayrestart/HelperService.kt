@@ -47,10 +47,14 @@ class HelperService : AccessibilityService() {
         private val OK = listOf("ok", "aceptar", "确定", "確定", "yes", "sí", "si")
         private val RESTART = listOf("restart", "reboot", "reiniciar", "重启", "重新启动", "重新啟動", "重新開機")
 
+        // Names of the CarPlay / Android Auto buttons inside the CarPlay app, for "Open it as".
+        private val CARPLAY = listOf("carplay", "apple carplay", "apple car play", "car play", "carplay mode")
+        private val ANDROID_AUTO = listOf("android auto", "androidauto", "google android auto", "android auto mode")
+
         private const val TICK_MS = 250L
     }
 
-    private enum class Step { FIND_FORCE_STOP, CONFIRM_FORCE_STOP, REOPEN, FIND_RESTART, CONFIRM_RESTART }
+    private enum class Step { FIND_FORCE_STOP, CONFIRM_FORCE_STOP, REOPEN, FIND_RESTART, CONFIRM_RESTART, PICK_MODE }
 
     private val handler = Handler(Looper.getMainLooper())
     private val tick = Runnable { onTick() }
@@ -108,6 +112,14 @@ class HelperService : AccessibilityService() {
             Outcome.report(this, false, getString(R.string.err_no_app_info), restart = true)
             false
         }
+    }
+
+    /** After the CarPlay app [pkg] opens, presses its Apple CarPlay or Android Auto button (per "Open it as").
+     *  Quiet and best effort: if the button never shows up, it just stops after a while. */
+    fun pickMode(pkg: String, delayMs: Long = 1_500) {
+        if (Prefs.openMode(this) == Prefs.MODE_AUTO || step != null) return
+        target = pkg
+        go(Step.PICK_MODE, delayMs)
     }
 
     /** Opens the power menu and presses Restart. False if the radio has no power menu to open. */
@@ -174,6 +186,16 @@ class HelperService : AccessibilityService() {
 
             Step.REOPEN -> finishRestart()
 
+            Step.PICK_MODE -> {
+                val labels = if (Prefs.openMode(this) == Prefs.MODE_CARPLAY) CARPLAY else ANDROID_AUTO
+                val button = find(labels, activeWindowOnly = true, onlyPackage = target)
+                when {
+                    button != null && tap(button) -> stop()
+                    waited > 15_000 -> stop()
+                    else -> again()
+                }
+            }
+
             Step.FIND_RESTART -> {
                 val button = find(RESTART)
                 when {
@@ -204,6 +226,7 @@ class HelperService : AccessibilityService() {
         } catch (_: Exception) {
         }
         Outcome.report(this, true, getString(R.string.done_restarted, name), restart = true)
+        if (launch != null) pickMode(target, 2_500)
     }
 
     /** [restart]: it was a CarPlay restart that failed (false for a reboot). */
@@ -225,7 +248,7 @@ class HelperService : AccessibilityService() {
 
     /** What's on screen, minus this app's own windows (its big "Restart" button mustn't be mistaken for the
      *  power menu's). */
-    private fun roots(activeWindowOnly: Boolean): List<AccessibilityNodeInfo> {
+    private fun roots(activeWindowOnly: Boolean, onlyPackage: String? = null): List<AccessibilityNodeInfo> {
         val list = ArrayList<AccessibilityNodeInfo>()
         rootInActiveWindow?.let { list.add(it) }
         if (!activeWindowOnly) {
@@ -234,13 +257,16 @@ class HelperService : AccessibilityService() {
             } catch (_: Exception) {
             }
         }
-        return list.filter { it.packageName?.toString() != packageName }
+        return list.filter {
+            val p = it.packageName?.toString()
+            p != packageName && (onlyPackage == null || p == onlyPackage)
+        }
     }
 
     /** The first visible button or label whose whole name is one of [labels]. */
-    private fun find(labels: List<String>, activeWindowOnly: Boolean = false): AccessibilityNodeInfo? {
+    private fun find(labels: List<String>, activeWindowOnly: Boolean = false, onlyPackage: String? = null): AccessibilityNodeInfo? {
         var budget = 4_000 // nodes to look at, at most
-        for (root in roots(activeWindowOnly)) {
+        for (root in roots(activeWindowOnly, onlyPackage)) {
             val stack = mutableListOf(root)
             while (stack.isNotEmpty() && budget-- > 0) {
                 val node = stack.removeAt(stack.size - 1)

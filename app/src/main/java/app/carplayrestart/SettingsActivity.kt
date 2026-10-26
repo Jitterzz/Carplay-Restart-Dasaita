@@ -23,6 +23,8 @@ class SettingsActivity : Activity() {
     private lateinit var appName: TextView
     private lateinit var appPkg: TextView
     private lateinit var reopenSwitch: Switch
+    private lateinit var modeRow: View
+    private lateinit var modeChoices: List<TextView>
     private lateinit var helperDot: PulseDot
     private lateinit var helperStatus: TextView
     private lateinit var helperButton: TextView
@@ -47,8 +49,21 @@ class SettingsActivity : Activity() {
         findViewById<View>(R.id.app_row).setOnClickListener { pickApp() }
 
         reopenSwitch.isChecked = Prefs.reopen(this)
-        reopenSwitch.setOnCheckedChangeListener { _, on -> Prefs.setReopen(this, on) }
+        reopenSwitch.setOnCheckedChangeListener { _, on ->
+            Prefs.setReopen(this, on)
+            showMode()
+        }
         findViewById<View>(R.id.reopen_row).setOnClickListener { reopenSwitch.toggle() }
+
+        modeRow = findViewById(R.id.mode_row)
+        modeChoices = listOf(R.id.mode_auto, R.id.mode_carplay, R.id.mode_android).map { findViewById<TextView>(it) }
+        modeChoices.forEachIndexed { mode, view ->
+            view.setOnClickListener {
+                Prefs.setOpenMode(this, mode)
+                showMode()
+            }
+        }
+        showMode()
 
         helperButton.setOnClickListener {
             if (HelperService.isOn(this)) SetupDialog.openAccessibilitySettings(this) else SetupDialog.show(this)
@@ -98,6 +113,15 @@ class SettingsActivity : Activity() {
                 null -> R.string.root_checking
             }
         )
+    }
+
+    /** Marks the chosen "Open it as" button; the whole row dims while "open it again" is off. */
+    private fun showMode() {
+        val chosen = Prefs.openMode(this)
+        modeChoices.forEachIndexed { mode, view ->
+            view.setBackgroundResource(if (mode == chosen) R.drawable.bg_pill_accent else R.drawable.bg_seg_off)
+        }
+        modeRow.alpha = if (Prefs.reopen(this)) 1f else 0.4f
     }
 
     private fun pickApp() {

@@ -78,6 +78,11 @@
     <string name="no_apps">No apps found.</string>
     <string name="reopen_title">Open it again after restarting</string>
     <string name="reopen_sub">Turn off to just close it and come back here</string>
+    <string name="mode_title">Open it as</string>
+    <string name="mode_sub">Presses that button in the app for you after it opens. Needs the helper on.</string>
+    <string name="mode_auto">Auto</string>
+    <string name="mode_carplay">Apple CarPlay</string>
+    <string name="mode_android">Android Auto</string>
     <string name="section_how">How it restarts</string>
     <string name="helper_title">Helper</string>
     <string name="helper_on">On. It presses Force stop for you when you tap Restart.</string>

@@ -28,6 +28,17 @@ object Prefs {
         sp(ctx).edit().putBoolean("reopen", on).apply()
     }
 
+    const val MODE_AUTO = 0
+    const val MODE_CARPLAY = 1
+    const val MODE_ANDROID_AUTO = 2
+
+    /** Which side to open after a restart: Auto lets the CarPlay app choose, or Apple CarPlay / Android Auto. */
+    fun openMode(ctx: Context): Int = sp(ctx).getInt("open_mode", MODE_AUTO).coerceIn(MODE_AUTO, MODE_ANDROID_AUTO)
+
+    fun setOpenMode(ctx: Context, mode: Int) {
+        sp(ctx).edit().putInt("open_mode", mode).apply()
+    }
+
     class Last(val time: Long, val ok: Boolean, val text: String)
 
     /** How the last CarPlay restart went, for the "Last restart" tile. */

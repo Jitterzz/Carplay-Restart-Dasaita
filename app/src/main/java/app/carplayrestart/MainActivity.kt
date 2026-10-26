@@ -128,7 +128,10 @@ class MainActivity : Activity() {
                         Outcome.report(this, true, getString(R.string.done_restarted, name), restart = true, toast = false)
                         showOrb(OrbView.Mode.DONE, settleMs = 2600)
                         // Let the green "Done" land for a beat, then open a fresh copy.
-                        if (reopen) Work.ui(900) { Apps.launchIntent(this, pkg)?.let { safeStart(it) } }
+                        if (reopen) Work.ui(900) {
+                            Apps.launchIntent(this, pkg)?.let { safeStart(it) }
+                            helper?.pickMode(pkg) // "Open it as": needs the helper on, root or not
+                        }
                     }
                     helper == null -> {
                         // No root and no helper yet: explain the one-time setup.

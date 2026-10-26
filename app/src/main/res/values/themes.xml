@@ -45,4 +45,18 @@
         <item name="android:layout_marginStart">4dp</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+    <!-- One choice in the "Open it as" row; the selected one gets the blue pill background in code. -->
+    <style name="ModeChoice">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">42dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/bg_seg_off</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/sora_semibold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 </resources>
