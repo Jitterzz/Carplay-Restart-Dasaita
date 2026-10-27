@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The widget's button before it's painted in the current look (and its preview in the widget list). -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:angle="315"
+                android:endColor="@color/violet"
+                android:startColor="@color/accent" />
+        </shape>
+    </item>
+    <item
+        android:width="26dp"
+        android:height="26dp"
+        android:drawable="@drawable/ic_restart"
+        android:gravity="center" />
+</layer-list>

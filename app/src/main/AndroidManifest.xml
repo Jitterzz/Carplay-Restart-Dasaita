@@ -37,8 +37,31 @@
             android:label="@string/settings"
             android:parentActivityName=".MainActivity" />
 
-        <!-- The helper: presses Force stop / OK / Restart on screen for radios without root.
-             Only Android itself can connect to it (BIND_ACCESSIBILITY_SERVICE). -->
+        <!-- What the home screen widget opens: restarts CarPlay without showing anything, in a task of its own so
+             this app's screens don't come forward. -->
+        <activity
+            android:name=".QuickRestartActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.CarPlayRestart.Invisible" />
+
+        <!-- The home screen widget. -->
+        <receiver
+            android:name=".RestartWidget"
+            android:exported="false"
+            android:label="@string/orb_description">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/restart_widget" />
+        </receiver>
+
+        <!-- The helper: presses Force stop / OK / Restart on screen for radios without root, and runs auto-fix and
+             the floating restart button. Only Android itself can connect to it (BIND_ACCESSIBILITY_SERVICE). -->
         <service
             android:name=".HelperService"
             android:exported="true"

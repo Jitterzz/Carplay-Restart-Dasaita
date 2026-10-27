@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings › Look: the six looks as cards (filled in code, three to a row on the radio). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sec_look"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+        style="@style/SectionTitle"
+        android:text="@string/nav_look" />
+
+    <TextView
+        style="@style/SectionLead"
+        android:text="@string/sec_look_lead" />
+
+    <LinearLayout
+        android:id="@+id/theme_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+</LinearLayout>

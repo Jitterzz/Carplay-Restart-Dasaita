@@ -13,6 +13,7 @@
         android:importantForAccessibility="no"
         android:padding="8dp"
         android:src="@drawable/ic_restart"
+        android:tag="logo"
         android:tint="#FFFFFF" />
 
     <LinearLayout
@@ -26,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/sora_semibold"
+            android:tag="strong|t1"
             android:text="@string/app_name"
             android:textColor="@color/text_primary"
             android:textSize="19sp" />
@@ -50,6 +52,7 @@
             android:format12Hour="h:mm"
             android:format24Hour="HH:mm"
             android:includeFontPadding="false"
+            android:tag="display|t1"
             android:textColor="@color/text_primary"
             android:textSize="26sp" />
 
@@ -59,6 +62,7 @@
             android:layout_marginTop="2dp"
             android:format12Hour="EEE, MMM d"
             android:format24Hour="EEE, MMM d"
+            android:tag="body|t2"
             android:textColor="@color/text_secondary"
             android:textSize="12sp" />
     </LinearLayout>
@@ -72,5 +76,6 @@
         android:padding="13dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_settings"
+        android:tag="circle|t2"
         android:tint="@color/text_secondary" />
 </LinearLayout>

@@ -3,6 +3,7 @@
      so the whole card (and Open settings) fits on screen without scrolling. -->
 <app.carplayrestart.GlassLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/setup_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -43,7 +44,8 @@
                         android:importantForAccessibility="no"
                         android:padding="11dp"
                         android:src="@drawable/ic_restart"
-                        android:tint="#FFFFFF" />
+                        android:tint="#FFFFFF"
+                        android:tag="logo" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -55,7 +57,8 @@
                         <TextView
                             style="@style/Overline"
                             android:text="@string/setup_overline"
-                            android:textColor="@color/accent_light" />
+                            android:textColor="@color/accent_light"
+                            android:tag="label|accent" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -64,7 +67,8 @@
                             android:fontFamily="@font/sora_bold"
                             android:text="@string/setup_title"
                             android:textColor="@color/text_primary"
-                            android:textSize="22sp" />
+                            android:textSize="22sp"
+                            android:tag="strong|t1" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -75,7 +79,8 @@
                     android:layout_marginTop="16dp"
                     android:lineSpacingExtra="3dp"
                     android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:tag="body|t2" />
             </LinearLayout>
 
             <!-- Right: the three steps, then the buttons -->
@@ -99,7 +104,8 @@
                         android:gravity="center"
                         android:text="1"
                         android:textColor="#FFFFFF"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:tag="logo" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -110,7 +116,8 @@
                         android:paddingTop="2dp"
                         android:text="@string/setup_step1"
                         android:textColor="@color/text_primary"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:tag="body|t1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -127,7 +134,8 @@
                         android:gravity="center"
                         android:text="2"
                         android:textColor="#FFFFFF"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:tag="logo" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -138,7 +146,8 @@
                         android:paddingTop="2dp"
                         android:text="@string/setup_step2"
                         android:textColor="@color/text_primary"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:tag="body|t1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -155,7 +164,8 @@
                         android:gravity="center"
                         android:text="3"
                         android:textColor="#FFFFFF"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:tag="logo" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -166,7 +176,8 @@
                         android:paddingTop="2dp"
                         android:text="@string/setup_step3"
                         android:textColor="@color/text_primary"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:tag="body|t1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -187,7 +198,8 @@
                         android:paddingEnd="16dp"
                         android:text="@string/not_now"
                         android:textColor="@color/text_secondary"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:tag="strong|t2" />
 
                     <TextView
                         android:id="@+id/setup_open"
@@ -201,7 +213,8 @@
                         android:paddingEnd="24dp"
                         android:text="@string/setup_open"
                         android:textColor="#FFFFFF"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:tag="pill" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

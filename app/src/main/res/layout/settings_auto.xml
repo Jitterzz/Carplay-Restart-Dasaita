@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings › Auto-fix: the switch and its two rules, and what it did lately. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sec_auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+        style="@style/SectionTitle"
+        android:text="@string/nav_auto" />
+
+    <TextView
+        android:id="@+id/auto_lead"
+        style="@style/SectionLead" />
+
+    <app.carplayrestart.GlassLayout
+        android:id="@+id/auto_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="14dp"
+        app:glassRadius="20dp">
+
+        <LinearLayout
+            android:id="@+id/auto_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/RowTitle"
+                    android:text="@string/auto_title" />
+
+                <TextView
+                    android:id="@+id/auto_sub"
+                    style="@style/RowSub" />
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/auto_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:tag="switch"
+                android:thumbTint="@color/switch_thumb"
+                android:trackTint="@color/switch_track" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@color/hairline"
+            android:tag="hairline" />
+
+        <!-- The two rules: dim while auto-fix is off -->
+        <LinearLayout
+            android:id="@+id/auto_rules"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/drop_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/RowTitle"
+                        android:text="@string/auto_drop_title"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/drop_sub"
+                        style="@style/RowSub"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <Switch
+                    android:id="@+id/drop_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:tag="switch"
+                    android:thumbTint="@color/switch_thumb"
+                    android:trackTint="@color/switch_track" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/plug_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/RowTitle"
+                        android:text="@string/auto_plug_title"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        style="@style/RowSub"
+                        android:text="@string/auto_plug_sub"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <Switch
+                    android:id="@+id/plug_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:tag="switch"
+                    android:thumbTint="@color/switch_thumb"
+                    android:trackTint="@color/switch_track" />
+            </LinearLayout>
+        </LinearLayout>
+    </app.carplayrestart.GlassLayout>
+
+    <app.carplayrestart.GlassLayout
+        android:id="@+id/log_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:padding="14dp"
+        app:glassRadius="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_history"
+                android:tag="icon|t3"
+                android:tint="@color/text_tertiary" />
+
+            <TextView
+                style="@style/Overline"
+                android:layout_marginStart="6dp"
+                android:text="@string/auto_recent" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/auto_log"
+            style="@style/RowSub"
+            android:layout_marginTop="8dp"
+            android:lineSpacingExtra="4dp"
+            android:textSize="12.5sp" />
+
+        <TextView
+            android:id="@+id/auto_limit"
+            style="@style/RowSub"
+            android:layout_marginTop="10dp"
+            android:tag="body|t3"
+            android:textSize="11.5sp" />
+    </app.carplayrestart.GlassLayout>
+</LinearLayout>

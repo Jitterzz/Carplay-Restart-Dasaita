@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Tall screens: the orb on top, the glass cards under it. (The radio uses layout-land.) -->
+<!-- Tall screens: the Restart button on top, the cards under it. (The radio uses layout-land.) -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg">
+    android:layout_height="match_parent">
 
-    <app.carplayrestart.AuroraView
+    <FrameLayout
+        android:id="@+id/backdrop_slot"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -25,13 +26,11 @@
             <include layout="@layout/top_bar" />
 
             <FrameLayout
+                android:id="@+id/hero_slot"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:padding="4dp">
-
-                <include layout="@layout/orb" />
-            </FrameLayout>
+                android:padding="4dp" />
 
             <include layout="@layout/panel" />
         </LinearLayout>

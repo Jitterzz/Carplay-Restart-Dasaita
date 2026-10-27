@@ -3,7 +3,7 @@
     <string name="app_name">CarPlay Restart</string>
     <string name="car_name">DASAITA RADIO</string>
 
-    <!-- The orb -->
+    <!-- The Restart button -->
     <string name="orb_description">Restart CarPlay</string>
     <string name="orb_restart">Restart</string>
     <string name="orb_sub">CarPlay</string>
@@ -45,6 +45,8 @@
 
     <!-- Results -->
     <string name="done_restarted">Restarted %1$s</string>
+    <string name="done_auto_restarted">Auto-fix restarted %1$s</string>
+    <string name="done_cache_restarted">Cleared %1$s’s cache and restarted it</string>
     <string name="done_rebooting">Rebooting the radio…</string>
     <string name="err_no_force_stop">Couldn’t find the Force stop button. Try again, or force stop it in Settings › Apps.</string>
     <string name="err_no_app_info">This radio wouldn’t open the app’s App info page.</string>
@@ -60,17 +62,25 @@
     <string name="the_carplay_app">the CarPlay app</string>
     <string name="setup_overline">One-time setup</string>
     <string name="setup_title">Turn on the helper</string>
-    <string name="setup_body">Android won’t let one app close another, so a small helper does the tapping: for Restart it presses Force stop on %1$s and opens it again, and for Reboot it uses the power menu. It only acts right after you press a button.</string>
+    <string name="setup_body">Android won’t let one app close another, so a small helper does the tapping: for Restart it presses Force stop on %1$s and opens it again, and for Reboot it uses the power menu. It also runs auto-fix and the floating button. It only looks at the screen to find those buttons and to see whether CarPlay is showing, and it never saves or sends anything.</string>
     <string name="setup_step1">Tap <b>Open settings</b> below.</string>
     <string name="setup_step2">Find <b>CarPlay Restart</b> (it can be under Downloaded apps or Installed services) and turn it on.</string>
     <string name="setup_step3">Says <b>Restricted setting</b>? Go to Settings › Apps › CarPlay Restart, tap ⋮ at the top, choose <b>Allow restricted settings</b>, then try again.</string>
     <string name="setup_open">Open settings</string>
     <string name="not_now">Not now</string>
-    <string name="helper_description">Lets CarPlay Restart close and reopen your CarPlay app when you press Restart: it opens the app’s App info page, presses Force stop, then opens the app again and, if you picked one in Settings, presses its Apple CarPlay or Android Auto button. When you hold Reboot radio, it opens the power menu and presses Restart. It acts only right after you press one of those buttons, and it doesn’t read, save or send anything else.</string>
+    <string name="helper_description">Lets CarPlay Restart close and reopen your CarPlay app. When you press Restart (in the app, on the floating button or on the widget), it opens the app’s App info page, presses Force stop (clearing the app’s cache first if you asked), then opens the app again and, if you picked one in Settings, presses its Apple CarPlay or Android Auto button. When you hold Reboot radio, it opens the power menu and presses Restart. If auto-fix is on, it checks every few seconds whether your CarPlay app is showing CarPlay, and restarts the app when CarPlay doesn’t come back. It doesn’t save or send anything it sees.</string>
 
-    <!-- Settings -->
+    <!-- Settings: the menu -->
     <string name="back">Back</string>
-    <string name="section_app">CarPlay app</string>
+    <string name="nav_app">CarPlay app</string>
+    <string name="nav_look">Look</string>
+    <string name="nav_auto">Auto-fix</string>
+    <string name="nav_quick">Quick restart</string>
+    <string name="nav_fixes">Fixes</string>
+    <string name="nav_helper">Helper &amp; root</string>
+
+    <!-- Settings › CarPlay app -->
+    <string name="sec_app_lead">Which app to restart, and how it opens again.</string>
     <string name="tap_to_pick">Tap to pick it</string>
     <string name="change">Change</string>
     <string name="pick_title">Which app runs CarPlay?</string>
@@ -82,9 +92,75 @@
     <string name="mode_auto">Auto</string>
     <string name="mode_carplay">Apple CarPlay</string>
     <string name="mode_android">Android Auto</string>
-    <string name="section_how">How it restarts</string>
+
+    <!-- Settings › Look -->
+    <string name="sec_look_lead">Pick a look. The floating button and the widget match it.</string>
+    <string name="theme_aurora">Aurora</string>
+    <string name="theme_aurora_sub">Glowing orb, drifting lights</string>
+    <string name="theme_redline">Redline</string>
+    <string name="theme_redline_sub">Tachometer and carbon fiber</string>
+    <string name="theme_neon">Neon Drive</string>
+    <string name="theme_neon_sub">Synthwave sunset road</string>
+    <string name="theme_warp">Warp</string>
+    <string name="theme_warp_sub">A portal in deep space</string>
+    <string name="theme_midnight">Midnight</string>
+    <string name="theme_midnight_sub">Quiet black and gold</string>
+    <string name="theme_sakura">Sakura</string>
+    <string name="theme_sakura_sub">Cherry blossoms and hearts</string>
+
+    <!-- Settings › Auto-fix -->
+    <string name="sec_auto_lead">Restarts %1$s by itself when CarPlay doesn’t come back.</string>
+    <string name="auto_title">Auto-fix</string>
+    <string name="auto_sub_on">On. It checks every few seconds while %1$s is open.</string>
+    <string name="auto_sub_learning">On. It starts once it has seen CarPlay running in %1$s.</string>
+    <string name="auto_sub_off">Off</string>
+    <string name="needs_helper">Needs the helper on (Helper &amp; root)</string>
+    <string name="auto_drop_title">When CarPlay drops</string>
+    <string name="auto_drop_sub">%1$s back on its own screen for 30 seconds, or stuck on “Connecting…”</string>
+    <string name="auto_plug_title">When you plug in</string>
+    <string name="auto_plug_sub">Still no CarPlay 25 seconds after plugging in a phone</string>
+    <string name="auto_recent">Recently</string>
+    <string name="auto_log_empty">Nothing yet. Each auto-fix restart shows up here.</string>
+    <string name="auto_limit">It waits while you’re using %1$s and tries once each time. After 3 tries that don’t help, it waits until CarPlay is back or you restart it yourself.</string>
+    <string name="fix_log_dropped">Restarted: CarPlay dropped</string>
+    <string name="fix_log_stuck">Restarted: stuck connecting</string>
+    <string name="fix_log_plugged">Restarted: no CarPlay after plugging in</string>
+    <string name="fix_log_paused">Taking a break after %1$d restarts</string>
+    <string name="fix_log_failed">That restart didn’t go through</string>
+
+    <!-- Settings › Quick restart -->
+    <string name="sec_quick_lead">Restart %1$s without coming back to this app.</string>
+    <string name="bubble_title">Floating restart button</string>
+    <string name="bubble_sub">Floats over %1$s. Tap to restart, drag to move, hold to open this app.</string>
+    <string name="bubble_description">Restart CarPlay. Hold to open CarPlay Restart.</string>
+    <string name="widget_title">Home screen widget</string>
+    <string name="widget_sub_add">A Restart button for your home screen, in this look.</string>
+    <string name="widget_sub_manual">Long-press an empty spot on your home screen, open Widgets, and pick CarPlay Restart.</string>
+    <string name="widget_add">Add</string>
+    <string name="widget_add_failed">This home screen can’t add it from here. Add it from its widget list instead.</string>
+    <string name="widget_label">Restart</string>
+    <string name="widget_description">One tap restarts CarPlay</string>
+
+    <!-- Settings › Fixes -->
+    <string name="sec_fixes_lead">For when a plain restart isn’t enough.</string>
+    <string name="cache_title">Clear cache &amp; restart</string>
+    <string name="cache_sub">Clears %1$s’s temporary files, then restarts it. Its settings and paired phones stay.</string>
+    <string name="cache_button">Clear cache</string>
+    <string name="cache_working">Clearing…</string>
+    <string name="wireless_title">Reset Wi-Fi &amp; Bluetooth</string>
+    <string name="wireless_sub">Turns them off and back on, then restarts %1$s. For wireless CarPlay that won’t connect.</string>
+    <string name="wireless_sub_no_root">Turns them off and back on, then restarts %1$s. Needs root, which this radio doesn’t have.</string>
+    <string name="wireless_button">Reset</string>
+    <string name="wireless_working">Resetting…</string>
+    <string name="wireless_needs_root">Resetting Wi-Fi and Bluetooth needs root, which this radio doesn’t have.</string>
+    <string name="wireless_confirm_title">Reset Wi-Fi &amp; Bluetooth?</string>
+    <string name="wireless_confirm_message">They go off for a few seconds, which ends calls and music over Bluetooth. Then %1$s restarts.</string>
+    <string name="wireless_done">Wi-Fi and Bluetooth are back on.</string>
+
+    <!-- Settings › Helper & root -->
+    <string name="sec_helper_lead">How this radio restarts apps: instantly with root, or with the helper doing the tapping.</string>
     <string name="helper_title">Helper</string>
-    <string name="helper_on">On. It presses Force stop for you when you tap Restart.</string>
+    <string name="helper_on">On. It does the tapping for Restart, auto-fix and the floating button.</string>
     <string name="helper_off">Off. Needed unless this radio has root.</string>
     <string name="helper_turn_on">Turn on</string>
     <string name="helper_manage">Open</string>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings › Quick restart: the floating button over the CarPlay app, and the home screen widget. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sec_quick"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+        style="@style/SectionTitle"
+        android:text="@string/nav_quick" />
+
+    <TextView
+        android:id="@+id/quick_lead"
+        style="@style/SectionLead" />
+
+    <app.carplayrestart.GlassLayout
+        android:id="@+id/bubble_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="14dp"
+        app:glassRadius="20dp">
+
+        <!-- A small copy of the floating button -->
+        <ImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_orb_small"
+            android:importantForAccessibility="no"
+            android:padding="11dp"
+            android:src="@drawable/ic_restart"
+            android:tag="logo"
+            android:tint="#FFFFFF" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/RowTitle"
+                android:text="@string/bubble_title" />
+
+            <TextView
+                android:id="@+id/bubble_sub"
+                style="@style/RowSub" />
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/bubble_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:tag="switch"
+            android:thumbTint="@color/switch_thumb"
+            android:trackTint="@color/switch_track" />
+    </app.carplayrestart.GlassLayout>
+
+    <app.carplayrestart.GlassLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="14dp"
+        app:glassRadius="20dp">
+
+        <ImageView
+            style="@style/RowIcon"
+            android:src="@drawable/ic_widgets"
+            android:tint="@color/accent_light" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/RowTitle"
+                android:text="@string/widget_title" />
+
+            <TextView
+                android:id="@+id/widget_sub"
+                style="@style/RowSub" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/widget_add"
+            style="@style/PillButton"
+            android:layout_marginStart="12dp"
+            android:text="@string/widget_add" />
+    </app.carplayrestart.GlassLayout>
+</LinearLayout>

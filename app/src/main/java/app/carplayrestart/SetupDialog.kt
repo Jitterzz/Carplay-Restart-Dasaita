@@ -20,6 +20,13 @@ object SetupDialog {
         if (activity.isFinishing || activity.isDestroyed) return
         val dialog = Dialog(activity, R.style.GlassDialog)
         dialog.setContentView(R.layout.dialog_setup)
+        // In the look picked in Settings: its fonts and colors on a solid card with the accent edge.
+        val t = Themes.current(activity)
+        dialog.findViewById<GlassLayout>(R.id.setup_card)?.let { card ->
+            Styler.apply(card, t)
+            card.setStyle(Styler.dialogCard(t))
+            card.setAccent(t.accent)
+        }
 
         val app = Prefs.target(activity)?.let { Apps.label(activity, it) }
             ?: activity.getString(R.string.the_carplay_app)

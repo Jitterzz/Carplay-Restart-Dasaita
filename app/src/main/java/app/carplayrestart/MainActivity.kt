@@ -1,26 +1,36 @@
 package app.carplayrestart
 
+import android.animation.AnimatorInflater
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.format.DateFormat
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import java.util.Date
 
-/** The one screen that matters: the glowing Restart orb for CarPlay, and Hold to reboot radio for when that's not enough. */
+/** The one screen that matters: the big Restart button for CarPlay, and Hold to reboot radio for when that's not enough. */
 class MainActivity : Activity() {
 
-    private lateinit var orb: OrbView
-    private lateinit var orbIcon: ImageView
-    private lateinit var orbLabel: TextView
-    private lateinit var orbSub: TextView
+    companion object {
+        /** Open with the "Turn on the helper" card showing (the widget asks for it before the first restart). */
+        const val EXTRA_SETUP = "setup"
+    }
+
+    private lateinit var t: AppTheme
+    private lateinit var hero: HeroView
+    private lateinit var backdrop: BackdropView
+    private lateinit var heroIcon: ImageView
+    private lateinit var heroLabel: TextView
+    private lateinit var heroSub: TextView
     private lateinit var appCard: View
     private lateinit var appIcon: ImageView
     private lateinit var appName: TextView
@@ -38,17 +48,44 @@ class MainActivity : Activity() {
     private lateinit var holdButton: HoldButton
 
     private val main = Handler(Looper.getMainLooper())
-    private val settle = Runnable { showOrb(OrbView.Mode.IDLE) }
+    private val settle = Runnable { showHero(HeroView.Mode.IDLE) }
     private var busy = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        t = Themes.current(this)
         setContentView(R.layout.activity_main)
+        Styler.window(this, t)
+        val root = findViewById<View>(R.id.root)
 
-        orb = findViewById(R.id.orb)
-        orbIcon = findViewById(R.id.orb_icon)
-        orbLabel = findViewById(R.id.orb_label)
-        orbSub = findViewById(R.id.orb_sub)
+        // The look's scenery and Restart button go in the two slots the layout leaves for them.
+        backdrop = t.makeBackdrop(this)
+        findViewById<FrameLayout>(R.id.backdrop_slot).addView(
+            backdrop, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,
+        )
+        hero = t.makeHero(this).apply {
+            id = R.id.hero
+            isClickable = true
+            isFocusable = true
+            contentDescription = getString(R.string.orb_description)
+            stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.press_scale)
+        }
+        layoutInflater.inflate(R.layout.hero_text, hero, true)
+        findViewById<FrameLayout>(R.id.hero_slot).addView(
+            hero,
+            FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER,
+            ),
+        )
+        hero.applyTheme(t)
+        Styler.apply(root, t)
+
+        // Some scenery centres on the button (a glow behind it, the sun behind the neon ring…).
+        root.viewTreeObserver.addOnGlobalLayoutListener { focusBackdrop() }
+
+        heroIcon = findViewById(R.id.orb_icon)
+        heroLabel = findViewById(R.id.orb_label)
+        heroSub = findViewById(R.id.orb_sub)
         appCard = findViewById(R.id.app_card)
         appIcon = findViewById(R.id.app_icon)
         appName = findViewById(R.id.app_name)
@@ -65,7 +102,7 @@ class MainActivity : Activity() {
         todayUnit = findViewById(R.id.today_unit)
         holdButton = findViewById(R.id.hold_button)
 
-        orb.setOnClickListener { restartCarPlay() }
+        hero.setOnClickListener { restartCarPlay() }
         setupButton.setOnClickListener { SetupDialog.show(this) }
         findViewById<View>(R.id.settings_button).setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
@@ -74,8 +111,11 @@ class MainActivity : Activity() {
         holdButton.onShortTap = { Toast.makeText(this, R.string.hold_hint, Toast.LENGTH_SHORT).show() }
         holdButton.setOnClickListener { confirmReboot() } // TalkBack and other accessibility clicks can't hold
 
-        showOrb(OrbView.Mode.IDLE)
-        if (savedInstanceState == null) playEntrance()
+        showHero(HeroView.Mode.IDLE)
+        if (savedInstanceState == null) {
+            playEntrance()
+            if (intent.getBooleanExtra(EXTRA_SETUP, false)) SetupDialog.show(this)
+        }
 
         // Find out whether this radio has root: it decides how restarts happen.
         Work.background {
@@ -84,10 +124,20 @@ class MainActivity : Activity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (intent.getBooleanExtra(EXTRA_SETUP, false)) SetupDialog.show(this)
+    }
+
     override fun onResume() {
         super.onResume()
+        // A new look picked in Settings: build the screen again in it.
+        if (Prefs.theme(this) != t.id) {
+            recreate()
+            return
+        }
         Outcome.listener = { onOutcome() }
-        // Back from a helper run (it opened ZLink over this screen): show how it went.
+        // Back from a helper run (it opened the CarPlay app over this screen): show how it went.
         if (busy && HelperService.instance?.isBusy != true) onOutcome()
         holdButton.reset()
         refresh()
@@ -106,7 +156,7 @@ class MainActivity : Activity() {
     // ---- Restart CarPlay ----
 
     private fun restartCarPlay() {
-        if (busy) return
+        if (busy || HelperService.instance?.isBusy == true) return
         val pkg = Prefs.target(this)
         if (pkg == null || !Apps.isSafeName(pkg)) {
             Toast.makeText(this, R.string.pick_first, Toast.LENGTH_LONG).show()
@@ -114,37 +164,29 @@ class MainActivity : Activity() {
             return
         }
         busy = true
-        showOrb(OrbView.Mode.WORKING)
-        val reopen = Prefs.reopen(this)
-        val name = Apps.label(this, pkg)
-        Work.background {
-            // With root: close it directly. Instant, and no settings screens flash up.
-            val stopped = Root.isAvailable() && Root.run("am force-stop $pkg").ok
-            Work.ui {
-                val helper = HelperService.instance
-                when {
-                    stopped -> {
-                        busy = false
-                        Outcome.report(this, true, getString(R.string.done_restarted, name), restart = true, toast = false)
-                        showOrb(OrbView.Mode.DONE, settleMs = 2600)
-                        // Let the green "Done" land for a beat, then open a fresh copy.
-                        if (reopen) Work.ui(900) {
-                            Apps.launchIntent(this, pkg)?.let { safeStart(it) }
-                            HelperService.instance?.pickMode(pkg) // "Open it as": needs the helper on, root or not
-                        }
-                    }
-                    helper == null -> {
-                        // No root and no helper yet: explain the one-time setup.
-                        busy = false
-                        showOrb(OrbView.Mode.IDLE)
-                        SetupDialog.show(this)
-                    }
-                    // The helper presses Force stop for us, then reports back (see onOutcome).
-                    !helper.restart(pkg, reopen) -> {
-                        busy = false
-                        showOrb(OrbView.Mode.ERROR, settleMs = 2600)
-                    }
-                    else -> Unit // the helper is on it
+        showHero(HeroView.Mode.WORKING)
+        // The button says how it went, so no message at the bottom of the screen as well.
+        Restarter.restart(this, toast = false) { result ->
+            if (isFinishing || isDestroyed) return@restart
+            when (result) {
+                Restarter.Result.DONE_ROOT -> {
+                    busy = false
+                    showHero(HeroView.Mode.DONE, settleMs = 2600)
+                }
+                Restarter.Result.HELPER_STARTED -> Unit // it reports back when it's done (see onOutcome)
+                Restarter.Result.NEEDS_SETUP -> {
+                    // No root and no helper yet: explain the one-time setup.
+                    busy = false
+                    showHero(HeroView.Mode.IDLE)
+                    SetupDialog.show(this)
+                }
+                Restarter.Result.NO_APP -> {
+                    busy = false
+                    showHero(HeroView.Mode.IDLE)
+                }
+                Restarter.Result.FAILED -> {
+                    busy = false
+                    showHero(HeroView.Mode.ERROR, settleMs = 2600)
                 }
             }
         }
@@ -157,9 +199,9 @@ class MainActivity : Activity() {
             busy = false
             val last = Prefs.last(this)
             if (last != null && System.currentTimeMillis() - last.time < 30_000) {
-                showOrb(if (last.ok) OrbView.Mode.DONE else OrbView.Mode.ERROR, settleMs = 2600)
+                showHero(if (last.ok) HeroView.Mode.DONE else HeroView.Mode.ERROR, settleMs = 2600)
             } else {
-                showOrb(OrbView.Mode.IDLE)
+                showHero(HeroView.Mode.IDLE)
             }
         }
         refresh()
@@ -169,12 +211,13 @@ class MainActivity : Activity() {
 
     /** Only for accessibility clicks; everyone else holds the button. */
     private fun confirmReboot() {
-        AlertDialog.Builder(this)
+        Styler.dialog(this, t)
             .setTitle(R.string.reboot_title)
             .setMessage(R.string.reboot_message)
             .setPositiveButton(R.string.reboot_yes) { _, _ -> reboot() }
             .setNegativeButton(android.R.string.cancel, null)
             .show()
+            .also { Styler.dress(it, t) }
     }
 
     private fun reboot() {
@@ -201,32 +244,46 @@ class MainActivity : Activity() {
 
     // ---- Screen ----
 
-    private fun showOrb(mode: OrbView.Mode, settleMs: Long = 0L) {
+    private fun showHero(mode: HeroView.Mode, settleMs: Long = 0L) {
         main.removeCallbacks(settle)
-        orb.mode = mode
+        hero.mode = mode
+        backdrop.mode = mode
         when (mode) {
-            OrbView.Mode.IDLE -> orbText(R.drawable.ic_restart, getString(R.string.orb_restart), getString(R.string.orb_sub))
-            OrbView.Mode.WORKING ->
-                orbText(R.drawable.ic_restart, getString(R.string.orb_working), getString(R.string.orb_working_sub))
-            OrbView.Mode.DONE ->
-                orbText(R.drawable.ic_check, getString(R.string.orb_done), getString(R.string.orb_done_sub, targetName()))
-            OrbView.Mode.ERROR ->
-                orbText(R.drawable.ic_alert, getString(R.string.orb_error), getString(R.string.orb_error_sub))
+            HeroView.Mode.IDLE ->
+                heroText(R.drawable.ic_restart, getString(R.string.orb_restart), getString(R.string.orb_sub))
+            HeroView.Mode.WORKING ->
+                heroText(R.drawable.ic_restart, getString(R.string.orb_working), getString(R.string.orb_working_sub))
+            HeroView.Mode.DONE ->
+                heroText(t.doneIcon, getString(R.string.orb_done), getString(R.string.orb_done_sub, targetName()))
+            HeroView.Mode.ERROR ->
+                heroText(R.drawable.ic_alert, getString(R.string.orb_error), getString(R.string.orb_error_sub))
         }
         if (settleMs > 0) main.postDelayed(settle, settleMs)
     }
 
-    private fun orbText(icon: Int, label: String, sub: String) {
-        orbIcon.setImageResource(icon)
-        orbLabel.text = label
-        orbSub.text = sub
-        for (v in listOf(orbIcon, orbLabel, orbSub)) {
+    private fun heroText(icon: Int, label: String, sub: String) {
+        heroIcon.setImageResource(icon)
+        heroLabel.text = label
+        heroSub.text = sub
+        for (v in listOf(heroIcon, heroLabel, heroSub)) {
             v.alpha = 0.2f
             v.animate().alpha(1f).setDuration(220).start()
         }
     }
 
     private fun targetName(): String = Prefs.target(this)?.let { Apps.label(this, it) } ?: getString(R.string.orb_sub)
+
+    /** Tells the scenery where the Restart button sits. */
+    private fun focusBackdrop() {
+        if (hero.width == 0 || backdrop.width == 0) return
+        val h = IntArray(2)
+        val b = IntArray(2)
+        hero.getLocationInWindow(h)
+        backdrop.getLocationInWindow(b)
+        backdrop.setFocus(
+            h[0] - b[0] + hero.width / 2f, h[1] - b[1] + hero.height / 2f, hero.width.toFloat(),
+        )
+    }
 
     private fun refresh() {
         val pkg = Prefs.target(this)
@@ -243,30 +300,30 @@ class MainActivity : Activity() {
 
         val root = Root.known()
         when {
-            root == true -> status(R.color.ok, R.string.status_ready, R.string.status_root_detail, setup = false)
-            HelperService.isOn(this) -> status(R.color.ok, R.string.status_ready, R.string.status_helper_detail, setup = false)
-            root == null -> status(R.color.idle, R.string.status_checking, R.string.status_checking_detail, setup = false)
-            else -> status(R.color.warn, R.string.status_setup, R.string.status_setup_detail, setup = true)
+            root == true -> status(t.ok, R.string.status_ready, R.string.status_root_detail, live = true, setup = false)
+            HelperService.isOn(this) ->
+                status(t.ok, R.string.status_ready, R.string.status_helper_detail, live = true, setup = false)
+            root == null ->
+                status(t.idle, R.string.status_checking, R.string.status_checking_detail, live = false, setup = false)
+            else -> status(t.warn, R.string.status_setup, R.string.status_setup_detail, live = true, setup = true)
         }
 
         val last = Prefs.last(this)
         if (last == null) {
             lastValue.setText(R.string.stat_none)
             lastSub.setText(R.string.stat_never)
-            lastSub.setTextColor(getColor(R.color.text_tertiary))
+            lastSub.setTextColor(t.text3)
         } else {
             lastValue.text = DateFormat.getTimeFormat(this).format(Date(last.time))
             lastSub.setText(if (last.ok) R.string.stat_worked else R.string.stat_failed)
-            lastSub.setTextColor(getColor(if (last.ok) R.color.ok else R.color.warn))
+            lastSub.setTextColor(if (last.ok) t.okText else t.warn)
         }
         val today = Prefs.restartsToday(this)
         todayValue.text = today.toString()
         todayUnit.text = resources.getQuantityString(R.plurals.restarts_today, today)
     }
 
-    private fun status(colorRes: Int, title: Int, detail: Int, setup: Boolean) {
-        val color = getColor(colorRes)
-        val live = colorRes != R.color.idle
+    private fun status(color: Int, title: Int, detail: Int, live: Boolean, setup: Boolean) {
         statusDot.color = color
         statusDot.pulsing = live
         statusCard.setAccent(if (live) color else 0)
@@ -275,24 +332,17 @@ class MainActivity : Activity() {
         setupButton.visibility = if (setup) View.VISIBLE else View.GONE
     }
 
-    /** The orb fades up, then the cards rise in one after another. */
+    /** The button fades up, then the cards rise in one after another. */
     private fun playEntrance() {
         val ease = DecelerateInterpolator(2f)
         val lift = 26 * resources.displayMetrics.density
-        orb.alpha = 0f
-        orb.animate().alpha(1f).setDuration(700).setInterpolator(ease).start()
+        hero.alpha = 0f
+        hero.animate().alpha(1f).setDuration(700).setInterpolator(ease).start()
         listOf(appCard, statusCard, statsRow, holdButton).forEachIndexed { i, v ->
             v.alpha = 0f
             v.translationY = lift
             v.animate().alpha(1f).translationY(0f)
                 .setStartDelay(140L + i * 80L).setDuration(520).setInterpolator(ease).start()
-        }
-    }
-
-    private fun safeStart(intent: Intent) {
-        try {
-            startActivity(intent)
-        } catch (_: Exception) {
         }
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Glass cards: the CarPlay app, the live status, today's stats (two tiles, always the same height), and Hold to reboot radio.
-     Shared by the side-by-side (radio) and stacked layouts. -->
+<!-- The cards: the CarPlay app, the live status, today's stats (two tiles, always the same height), and Hold to
+     reboot radio. Shared by the side-by-side (radio) and stacked layouts. Tags say how the look paints each part
+     (see Styler in Themes.kt). -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -19,7 +20,8 @@
         <FrameLayout
             android:layout_width="46dp"
             android:layout_height="46dp"
-            android:background="@drawable/bg_icon_tile">
+            android:background="@drawable/bg_icon_tile"
+            android:tag="tile">
 
             <ImageView
                 android:id="@+id/app_icon"
@@ -44,6 +46,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/sora_bold"
                 android:maxLines="1"
+                android:tag="strong|t1"
                 android:textColor="@color/text_primary"
                 android:textSize="19sp" />
 
@@ -52,6 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
+                android:tag="body|t2"
                 android:textColor="@color/text_secondary"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -88,6 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/sora_semibold"
+                android:tag="strong|t1"
                 android:textColor="@color/text_primary"
                 android:textSize="18sp" />
 
@@ -96,6 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
+                android:tag="body|t2"
                 android:textColor="@color/text_secondary"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -110,6 +116,7 @@
             android:gravity="center"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
+            android:tag="pillwarn"
             android:text="@string/set_up"
             android:textColor="#FF1A1204"
             android:textSize="15sp"
@@ -141,6 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:fontFamily="@font/sora_semibold"
+                android:tag="display|t1"
                 android:textColor="@color/text_primary"
                 android:textSize="21sp" />
 
@@ -149,6 +157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
+                android:tag="body|t2"
                 android:textSize="12sp" />
         </app.carplayrestart.GlassLayout>
 
@@ -176,6 +185,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sora_semibold"
+                    android:tag="display|t1"
                     android:textColor="@color/text_primary"
                     android:textSize="21sp" />
 
@@ -184,6 +194,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
+                    android:tag="body|t2"
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -210,6 +221,7 @@
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:src="@drawable/ic_power"
+                android:tag="icon|holdicon"
                 android:tint="@color/warn" />
 
             <TextView
@@ -218,6 +230,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/sora_semibold"
+                android:tag="strong|hold"
                 android:text="@string/hold_idle"
                 android:textColor="#FFFCD34D"
                 android:textSize="17sp" />

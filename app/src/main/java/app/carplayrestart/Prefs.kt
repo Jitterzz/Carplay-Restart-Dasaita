@@ -39,6 +39,64 @@ object Prefs {
         sp(ctx).edit().putInt("open_mode", mode).apply()
     }
 
+    /** The look picked in Settings › Look. */
+    fun theme(ctx: Context): ThemeId = try {
+        ThemeId.valueOf(sp(ctx).getString("theme", null) ?: ThemeId.AURORA.name)
+    } catch (_: Exception) {
+        ThemeId.AURORA
+    }
+
+    fun setTheme(ctx: Context, id: ThemeId) {
+        sp(ctx).edit().putString("theme", id.name).apply()
+    }
+
+    /** The floating restart button over the CarPlay app (off unless turned on), and where it was left. */
+    fun bubble(ctx: Context): Boolean = sp(ctx).getBoolean("bubble", false)
+
+    fun setBubble(ctx: Context, on: Boolean) {
+        sp(ctx).edit().putBoolean("bubble", on).apply()
+    }
+
+    fun bubbleX(ctx: Context): Int = sp(ctx).getInt("bubble_x", -1)
+    fun bubbleY(ctx: Context): Int = sp(ctx).getInt("bubble_y", -1)
+
+    fun setBubblePos(ctx: Context, x: Int, y: Int) {
+        sp(ctx).edit().putInt("bubble_x", x).putInt("bubble_y", y).apply()
+    }
+
+    /** Auto-fix (off until turned on), and its two rules (on). */
+    fun autoFix(ctx: Context): Boolean = sp(ctx).getBoolean("auto_fix", false)
+    fun autoDrop(ctx: Context): Boolean = sp(ctx).getBoolean("auto_drop", true)
+    fun autoPlug(ctx: Context): Boolean = sp(ctx).getBoolean("auto_plug", true)
+
+    fun setAutoFix(ctx: Context, on: Boolean) {
+        sp(ctx).edit().putBoolean("auto_fix", on).apply()
+    }
+
+    fun setAutoDrop(ctx: Context, on: Boolean) {
+        sp(ctx).edit().putBoolean("auto_drop", on).apply()
+    }
+
+    fun setAutoPlug(ctx: Context, on: Boolean) {
+        sp(ctx).edit().putBoolean("auto_plug", on).apply()
+    }
+
+    /** The CarPlay app auto-fix has seen showing CarPlay at least once (it only acts after that). */
+    fun videoSeen(ctx: Context): String? = sp(ctx).getString("video_seen", null)
+
+    fun setVideoSeen(ctx: Context, pkg: String) {
+        sp(ctx).edit().putString("video_seen", pkg).apply()
+    }
+
+    /** What auto-fix saw and did lately, newest first (a few lines). */
+    fun fixLog(ctx: Context): List<String> =
+        (sp(ctx).getString("fix_log", "") ?: "").split('\n').filter { it.isNotBlank() }
+
+    fun addFixLog(ctx: Context, line: String) {
+        val list = (listOf(line) + fixLog(ctx)).take(6)
+        sp(ctx).edit().putString("fix_log", list.joinToString("\n")).apply()
+    }
+
     class Last(val time: Long, val ok: Boolean, val text: String)
 
     /** How the last CarPlay restart went, for the "Last restart" tile. */

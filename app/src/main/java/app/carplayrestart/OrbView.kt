@@ -10,9 +10,6 @@ import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.SweepGradient
 import android.os.SystemClock
-import android.util.AttributeSet
-import android.view.View
-import android.widget.FrameLayout
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
@@ -21,23 +18,13 @@ import kotlin.math.pow
 import kotlin.math.sin
 
 /**
- * The big Restart button: a glowing orb inside a gauge ring, with a comet orbiting it.
+ * Aurora's Restart button: a glowing orb inside a gauge ring, with a comet orbiting it.
  *
  *  - Idle: the comet drifts around, lighting up the gauge ticks it passes, and the glow slowly breathes.
  *  - Working: the comet races, the icon spins and rings ripple outwards.
  *  - Done / error: the whole orb fades to green / amber for a moment.
- *
- * It keeps itself square (as big as its space allows, up to 380dp). The icon and words inside are ordinary
- * child views; this class only paints behind them. The animation runs on the display's frame clock, so it keeps
- * moving even on radios with system animations turned off, and it stops whenever the screen isn't showing.
  */
-class OrbView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-) : FrameLayout(context, attrs, defStyleAttr) {
-
-    enum class Mode { IDLE, WORKING, DONE, ERROR }
+class OrbView(context: Context) : HeroView(context) {
 
     private companion object {
         const val IDLE_SPEED = 0.05f // degrees per millisecond: one lap in about 7 seconds
@@ -59,9 +46,6 @@ class OrbView @JvmOverloads constructor(
         )
     }
 
-    private val dp = resources.displayMetrics.density
-    private val maxSize = (380 * dp).toInt()
-
     // Colors: the current mix, fading from one palette to the next.
     private val colors = IDLE_COLORS.copyOf()
     private val fromColors = IDLE_COLORS.copyOf()
@@ -69,25 +53,7 @@ class OrbView @JvmOverloads constructor(
     private var blend = 1f
     private var shadersDirty = true
 
-    var mode: Mode = Mode.IDLE
-        set(value) {
-            if (field == value) return
-            field = value
-            colors.copyInto(fromColors)
-            val next = when (value) {
-                Mode.DONE -> DONE_COLORS
-                Mode.ERROR -> ERROR_COLORS
-                else -> IDLE_COLORS
-            }
-            next.copyInto(toColors)
-            blend = 0f
-            if (value != Mode.IDLE) ripple()
-            invalidate()
-        }
-
     // Geometry, worked out when the size is known.
-    private var cx = 0f
-    private var cy = 0f
     private var r = 0f
     private var rCore = 0f
     private var rRing = 0f
@@ -145,69 +111,30 @@ class OrbView @JvmOverloads constructor(
     private var breathe = 0.5f
     private val waves = FloatArray(6) { -1f } // each ripple's progress (0 to 1), or -1 when unused
     private var lastWaveAt = 0L
-    private var iconSpin = 0f
-    private var icon: View? = null
 
-    private var running = false
-    private var lastFrame = 0L
-    private val frame = object : Runnable {
-        override fun run() {
-            if (!running) return
-            val now = SystemClock.uptimeMillis()
-            val dt = if (lastFrame == 0L) 16L else min(50L, now - lastFrame)
-            lastFrame = now
-            step(now, dt)
-            invalidate()
-            postOnAnimation(this)
+    override fun onModeChanged(old: Mode, new: Mode) {
+        colors.copyInto(fromColors)
+        val next = when (new) {
+            Mode.DONE -> DONE_COLORS
+            Mode.ERROR -> ERROR_COLORS
+            else -> IDLE_COLORS
         }
-    }
-
-    init {
-        setWillNotDraw(false)
-    }
-
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-        icon = findViewById(R.id.orb_icon)
+        next.copyInto(toColors)
+        blend = 0f
+        if (new != Mode.IDLE) ripple()
     }
 
     /** One ring rippling out from the orb: on a tap, and every so often while working. */
-    fun ripple() {
+    private fun ripple() {
         val slot = waves.indexOfFirst { it < 0f }
         if (slot >= 0) waves[slot] = 0f
         lastWaveAt = SystemClock.uptimeMillis()
     }
 
-    override fun setPressed(pressed: Boolean) {
-        if (pressed && !isPressed) ripple()
-        super.setPressed(pressed)
-    }
+    override fun onPress() = ripple()
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val w = MeasureSpec.getSize(widthMeasureSpec)
-        val h = MeasureSpec.getSize(heightMeasureSpec)
-        val wKnown = MeasureSpec.getMode(widthMeasureSpec) != MeasureSpec.UNSPECIFIED
-        val hKnown = MeasureSpec.getMode(heightMeasureSpec) != MeasureSpec.UNSPECIFIED
-        val size = when {
-            wKnown && hKnown -> minOf(w, h)
-            wKnown -> w
-            hKnown -> h
-            else -> maxSize
-        }.coerceAtMost(maxSize)
-        // The words sit on the sphere, so keep them inside it (the sphere is 64% of the width).
-        getChildAt(0)?.layoutParams?.let { lp ->
-            val want = (size * 0.48f).toInt()
-            if (lp.width != want) lp.width = want
-        }
-        val exact = MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY)
-        super.onMeasure(exact, exact)
-    }
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        cx = w / 2f
-        cy = h / 2f
-        r = min(w, h) / 2f
+    override fun onGeometry() {
+        r = size / 2f
         rCore = r * 0.64f
         rInner = r * 0.735f
         rRing = r * 0.825f
@@ -276,7 +203,7 @@ class OrbView @JvmOverloads constructor(
         shadersDirty = false
     }
 
-    private fun step(now: Long, dt: Long) {
+    override fun step(now: Long, dt: Long) {
         val target = if (mode == Mode.WORKING) WORK_SPEED else IDLE_SPEED
         spinSpeed += (target - spinSpeed) * min(1f, dt / 320f)
         spin = (spin + spinSpeed * dt) % 360f
@@ -296,20 +223,9 @@ class OrbView @JvmOverloads constructor(
             for (i in colors.indices) colors[i] = lerpColor(fromColors[i], toColors[i], blend)
             shadersDirty = true
         }
-
-        // The icon spins while working, then rolls on round to upright.
-        icon?.let { v ->
-            if (mode == Mode.WORKING) {
-                iconSpin = (iconSpin + 0.4f * dt) % 360f
-            } else if (iconSpin != 0f) {
-                iconSpin += 0.6f * dt
-                if (iconSpin >= 360f) iconSpin = 0f
-            }
-            v.rotation = iconSpin
-        }
     }
 
-    override fun onDraw(canvas: Canvas) {
+    override fun drawHero(canvas: Canvas, now: Long) {
         if (r <= 0f) return
         if (shadersDirty) buildShaders()
         val working = mode == Mode.WORKING
@@ -364,39 +280,5 @@ class OrbView @JvmOverloads constructor(
         canvas.drawCircle(cx, cy, rCore, shadePaint)
         canvas.drawCircle(cx, cy, rCore, sheenPaint)
         canvas.drawCircle(cx, cy, rCore - rimPaint.strokeWidth / 2f, rimPaint)
-
-        super.onDraw(canvas)
-    }
-
-    // Animate only while the screen is actually showing.
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        updateLoop()
-    }
-
-    override fun onDetachedFromWindow() {
-        stopLoop()
-        super.onDetachedFromWindow()
-    }
-
-    override fun onWindowVisibilityChanged(visibility: Int) {
-        super.onWindowVisibilityChanged(visibility)
-        updateLoop()
-    }
-
-    private fun updateLoop() {
-        if (isAttachedToWindow && windowVisibility == View.VISIBLE) startLoop() else stopLoop()
-    }
-
-    private fun startLoop() {
-        if (running) return
-        running = true
-        lastFrame = 0L
-        postOnAnimation(frame)
-    }
-
-    private fun stopLoop() {
-        running = false
-        removeCallbacks(frame)
     }
 }

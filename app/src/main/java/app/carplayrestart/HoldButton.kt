@@ -16,7 +16,7 @@ import android.widget.TextView
 import kotlin.math.min
 
 /**
- * "Hold to reboot radio": press and hold, and an amber glow fills the button left to right. Let go early and it
+ * "Hold to reboot radio": press and hold, and a glow (amber, or the theme's color) fills the button left to right. Let go early and it
  * drains back; hold all the way (about 1.4 seconds) and it fires. Safer than a tap while driving, and no
  * dialog with small buttons. Timing comes from the display's frame clock, not system animations, so a radio
  * with animations turned off can't make it fire on a tap.
@@ -41,7 +41,13 @@ class HoldButton @JvmOverloads constructor(
     }
 
     private val dp = resources.displayMetrics.density
-    private val radius = 20 * dp
+    private var radius = 20 * dp
+
+    // Colors, from the theme (amber by default).
+    private var strokeFrom = 0xFFFBBF24.toInt()
+    private var strokeTo = 0xE6FB923C.toInt()
+    private var progressFrom = 0x40FBBF24
+    private var progressTo = 0x99F97316.toInt()
     private val rect = RectF()
     private val clip = Path()
     private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0x14FBBF24 }
@@ -72,22 +78,44 @@ class HoldButton @JvmOverloads constructor(
         label = findViewById(R.id.hold_label)
     }
 
+    /** Takes on a theme's look. */
+    fun setStyle(s: HoldStyle) {
+        radius = s.radiusDp * dp
+        fillPaint.color = s.fill
+        strokeFrom = s.stroke
+        strokeTo = s.stroke2
+        progressFrom = s.progress
+        progressTo = s.progress2
+        edgePaint.color = withAlpha(s.text, 0.9f) // the bright leading edge of the fill
+        strokePaint.strokeWidth = s.strokeDp * dp
+        rebuild()
+        invalidate()
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        rebuild()
+    }
+
+    private fun rebuild() {
+        val w = width.toFloat()
+        val h = height.toFloat()
+        if (w <= 0f || h <= 0f) return
         val inset = strokePaint.strokeWidth / 2f
         rect.set(inset, inset, w - inset, h - inset)
+        val r = minOf(radius, rect.height() / 2f)
+        radiusNow = r
         clip.reset()
-        clip.addRoundRect(rect, radius, radius, Path.Direction.CW)
-        progressPaint.shader = LinearGradient(
-            0f, 0f, w.toFloat(), 0f,
-            0x40FBBF24, 0x99F97316.toInt(), Shader.TileMode.CLAMP,
-        )
+        clip.addRoundRect(rect, r, r, Path.Direction.CW)
+        progressPaint.shader = LinearGradient(0f, 0f, w, 0f, progressFrom, progressTo, Shader.TileMode.CLAMP)
         strokePaint.shader = LinearGradient(
-            0f, 0f, w.toFloat(), h.toFloat(),
-            intArrayOf(0xFFFBBF24.toInt(), 0x80F97316.toInt(), 0xE6FB923C.toInt()),
+            0f, 0f, w, h,
+            intArrayOf(strokeFrom, withAlpha(strokeTo, 0.5f), strokeTo),
             floatArrayOf(0f, 0.5f, 1f), Shader.TileMode.CLAMP,
         )
     }
+
+    private var radiusNow = 20f
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (!isEnabled || confirmed) return true
@@ -165,6 +193,7 @@ class HoldButton @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
+        val radius = radiusNow
         canvas.drawRoundRect(rect, radius, radius, fillPaint)
         if (progress > 0f) {
             canvas.save()

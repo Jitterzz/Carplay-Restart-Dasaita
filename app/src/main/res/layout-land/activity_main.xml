@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The radio's wide screen: the orb on the left, the glass cards on the right, over the drifting aurora. -->
+<!-- The radio's wide screen: the Restart button on the left, the cards on the right, over the look's scenery.
+     The scenery and the button are built in code for the look picked in Settings, and go in the two slots. -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg">
+    android:layout_height="match_parent">
 
-    <app.carplayrestart.AuroraView
+    <FrameLayout
+        android:id="@+id/backdrop_slot"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -31,12 +33,10 @@
                 android:orientation="horizontal">
 
                 <FrameLayout
+                    android:id="@+id/hero_slot"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1.08">
-
-                    <include layout="@layout/orb" />
-                </FrameLayout>
+                    android:layout_weight="1.08" />
 
                 <ScrollView
                     android:layout_width="0dp"

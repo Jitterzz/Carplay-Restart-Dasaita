@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The home screen widget: a round Restart button (drawn in the current look by RestartWidget) and a label. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:contentDescription="@string/orb_description"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <ImageView
+        android:id="@+id/widget_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        android:src="@drawable/widget_button" />
+
+    <TextView
+        android:id="@+id/widget_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:importantForAccessibility="no"
+        android:maxLines="1"
+        android:shadowColor="#CC000000"
+        android:shadowDy="1"
+        android:shadowRadius="4"
+        android:text="@string/widget_label"
+        android:textColor="#FFFFFFFF"
+        android:textSize="12sp" />
+</LinearLayout>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The Restart button, which the look builds in code (MainActivity). -->
+    <item name="hero" type="id" />
+</resources>

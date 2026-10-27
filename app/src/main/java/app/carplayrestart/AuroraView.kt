@@ -8,22 +8,16 @@ import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.RadialGradient
 import android.graphics.Shader
-import android.os.SystemClock
-import android.util.AttributeSet
-import android.view.View
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 
 /**
- * The backdrop: deep night blue with soft blue, violet and cyan glows drifting very slowly, a faint dot grid
- * and darker corners. Redraws about 30 times a second while showing, and not at all otherwise.
+ * Aurora's backdrop: deep night blue with soft blue, violet and cyan glows drifting very slowly, a faint dot grid
+ * and darker corners.
  */
-class AuroraView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-) : View(context, attrs) {
+class AuroraView(context: Context) : BackdropView(context) {
 
     private class Glow(
         val color: Int,
@@ -42,24 +36,9 @@ class AuroraView @JvmOverloads constructor(
         Glow(0x3322D3EE, 0.80f, 1.05f, 0.40f, 0.05f, 0.04f, 18_000f), // cyan, bottom right
     )
 
-    private val dp = resources.displayMetrics.density
     private val basePaint = Paint()
     private val gridPaint = Paint()
     private val vignettePaint = Paint()
-
-    private var running = false
-    private var lastDraw = 0L
-    private val frame = object : Runnable {
-        override fun run() {
-            if (!running) return
-            val now = SystemClock.uptimeMillis()
-            if (now - lastDraw >= 33) {
-                lastDraw = now
-                invalidate()
-            }
-            postOnAnimation(this)
-        }
-    }
 
     init {
         // A tiny tile with one faint dot, repeated: the grid.
@@ -72,8 +51,9 @@ class AuroraView @JvmOverloads constructor(
         gridPaint.shader = BitmapShader(tile, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
+    override fun onLayoutChanged() {
+        val w = width
+        val h = height
         if (w == 0 || h == 0) return
         basePaint.shader = LinearGradient(
             0f, 0f, 0f, h.toFloat(),
@@ -96,14 +76,13 @@ class AuroraView @JvmOverloads constructor(
         )
     }
 
-    override fun onDraw(canvas: Canvas) {
+    override fun drawBackdrop(canvas: Canvas, now: Long) {
         val w = width.toFloat()
         val h = height.toFloat()
-        if (w == 0f || h == 0f) return
         canvas.drawRect(0f, 0f, w, h, basePaint)
-        val t = SystemClock.uptimeMillis().toFloat()
         for (g in glows) {
-            val phase = (2 * PI * (t % g.periodMs) / g.periodMs).toFloat()
+            // Reduce the clock while it's still a whole number: as a float it loses precision after a few days.
+            val phase = (2 * PI * (now % g.periodMs.toLong()) / g.periodMs).toFloat()
             val x = (g.x + g.dx * sin(phase)) * w
             val y = (g.y + g.dy * cos(phase * 0.85f)) * h
             canvas.save()
@@ -113,32 +92,5 @@ class AuroraView @JvmOverloads constructor(
         }
         canvas.drawRect(0f, 0f, w, h, gridPaint)
         canvas.drawRect(0f, 0f, w, h, vignettePaint)
-    }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        updateLoop()
-    }
-
-    override fun onDetachedFromWindow() {
-        running = false
-        removeCallbacks(frame)
-        super.onDetachedFromWindow()
-    }
-
-    override fun onWindowVisibilityChanged(visibility: Int) {
-        super.onWindowVisibilityChanged(visibility)
-        updateLoop()
-    }
-
-    private fun updateLoop() {
-        val show = isAttachedToWindow && windowVisibility == View.VISIBLE
-        if (show && !running) {
-            running = true
-            postOnAnimation(frame)
-        } else if (!show) {
-            running = false
-            removeCallbacks(frame)
-        }
     }
 }
