@@ -139,7 +139,7 @@ class RestartWidget : AppWidgetProvider() {
                 strokeWidth = 1.2f * dp
                 color = if (t.light) 0xE6FFFFFF.toInt() else 0x59FFFFFF
             })
-            ctx.getDrawable(R.drawable.ic_restart)?.mutate()?.let { d ->
+            ctx.getDrawable(R.drawable.ic_jumpstart)?.mutate()?.let { d ->
                 d.setTint(t.onPill)
                 val half = (r * 0.48f).toInt()
                 d.setBounds((c - half).toInt(), (c - half).toInt(), (c + half).toInt(), (c + half).toInt())

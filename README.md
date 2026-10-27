@@ -1,21 +1,21 @@
-# CarPlay Restart
+# Jumpstart
 
-One big button for the Dasaita radio. When CarPlay or Android Auto gets stuck after the phone drops off and comes back (out of the car for a delivery, back in), tap **Restart**: it closes ZLink, the app that runs CarPlay and Android Auto on the radio, and opens it fresh. **Hold to reboot radio** restarts the whole radio for the times that isn't enough.
+One big button for the Dasaita radio (the app used to be called CarPlay Restart). When CarPlay or Android Auto gets stuck after the phone drops off and comes back (out of the car for a delivery, back in), tap **Restart**: it closes ZLink, the app that runs CarPlay and Android Auto on the radio, and opens it fresh. **Hold to reboot radio** restarts the whole radio for the times that isn't enough.
 
 It can also fix CarPlay by itself when it drops (**auto-fix**), put a small **floating restart button** over ZLink, add a **home screen widget**, clear ZLink's cache, and come in six looks.
 
 ## Install on the radio
 
-1. Download the newest `CarPlay-Restart-<version>.apk` from the repo's **Releases** page. Either open the page in the radio's browser (signed in to GitHub), or download it on your phone or a computer and copy it to a USB stick.
+1. Download the newest `Jumpstart-<version>.apk` from the repo's **Releases** page. Either open the page in the radio's browser (signed in to GitHub), or download it on your phone or a computer and copy it to a USB stick.
 2. Open the APK on the radio (from Downloads, or the radio's file manager for the USB stick) and tap **Install**. If the radio asks, allow that app to install unknown apps. Newer versions install over the old one and keep your settings and stats.
 
 ## First time: turn on the helper
 
 Android doesn't let one app close another by itself, so on a radio without root a small helper does the tapping. Auto-fix and the floating button need it too, even with root.
 
-1. Open CarPlay Restart and tap **Set up** (or just tap Restart), then **Open settings**.
-2. Find **CarPlay Restart** in Accessibility (it can be under *Downloaded apps* or *Installed services*) and turn it on.
-3. If the radio says **Restricted setting** (Android 13 and newer): go to Settings › Apps › CarPlay Restart, tap **⋮** at the top, choose **Allow restricted settings**, then turn it on again.
+1. Open Jumpstart and tap **Set up** (or just tap Restart), then **Open settings**.
+2. Find **Jumpstart** in Accessibility (it can be under *Downloaded apps* or *Installed services*) and turn it on.
+3. If the radio says **Restricted setting** (Android 13 and newer): go to Settings › Apps › Jumpstart, tap **⋮** at the top, choose **Allow restricted settings**, then turn it on again.
 
 The status card turns green: **Ready · Helper on**. If the radio has root it says **Ready · Root access**, and restarts happen instantly without the helper.
 
@@ -51,8 +51,10 @@ A small Kotlin app with no libraries (`app/src/main/java/app/carplayrestart`):
 
 The app asks for no permissions: no internet, no storage. The floating button is drawn by the helper, so it doesn't need "draw over other apps" either.
 
+The icon is a lightning bolt inside a restart arrow (`ic_launcher_*.xml`, and `ic_jumpstart.xml` for the logo inside the app, the floating button and the widget).
+
 Fonts (all SIL Open Font License, in `licenses/`): Sora (Aurora), Saira Semi Condensed (Redline), Audiowide and Outfit (Neon Drive), Space Grotesk (Warp), Manrope (Midnight), Fredoka and Nunito (Sakura). Icons are Material icons (Apache 2.0).
 
 GitHub builds the APK on every push to `main` (`.github/workflows/build-apk.yml`) and puts it on the Releases page. **Actions › Clean up old releases** deletes old builds.
 
-CarPlay Restart isn't made by or connected to Apple, Google, Dasaita or ZLink.
+Jumpstart isn't made by or connected to Apple, Google, Dasaita or ZLink.

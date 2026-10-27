@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">CarPlay Restart</string>
+    <string name="app_name">Jumpstart</string>
     <string name="car_name">DASAITA RADIO</string>
 
     <!-- The Restart button -->
@@ -64,11 +64,11 @@
     <string name="setup_title">Turn on the helper</string>
     <string name="setup_body">Android won’t let one app close another, so a small helper does the tapping: for Restart it presses Force stop on %1$s and opens it again, and for Reboot it uses the power menu. It also runs auto-fix and the floating button. It only looks at the screen to find those buttons and to see whether CarPlay is showing, and it never saves or sends anything.</string>
     <string name="setup_step1">Tap <b>Open settings</b> below.</string>
-    <string name="setup_step2">Find <b>CarPlay Restart</b> (it can be under Downloaded apps or Installed services) and turn it on.</string>
-    <string name="setup_step3">Says <b>Restricted setting</b>? Go to Settings › Apps › CarPlay Restart, tap ⋮ at the top, choose <b>Allow restricted settings</b>, then try again.</string>
+    <string name="setup_step2">Find <b>Jumpstart</b> (it can be under Downloaded apps or Installed services) and turn it on.</string>
+    <string name="setup_step3">Says <b>Restricted setting</b>? Go to Settings › Apps › Jumpstart, tap ⋮ at the top, choose <b>Allow restricted settings</b>, then try again.</string>
     <string name="setup_open">Open settings</string>
     <string name="not_now">Not now</string>
-    <string name="helper_description">Lets CarPlay Restart close and reopen your CarPlay app. When you press Restart (in the app, on the floating button or on the widget), it opens the app’s App info page, presses Force stop (clearing the app’s cache first if you asked), then opens the app again and, if you picked one in Settings, presses its Apple CarPlay or Android Auto button. When you hold Reboot radio, it opens the power menu and presses Restart. If auto-fix is on, it checks every few seconds whether your CarPlay app is showing CarPlay, and restarts the app when CarPlay doesn’t come back. It doesn’t save or send anything it sees.</string>
+    <string name="helper_description">Lets Jumpstart close and reopen your CarPlay app. When you press Restart (in the app, on the floating button or on the widget), it opens the app’s App info page, presses Force stop (clearing the app’s cache first if you asked), then opens the app again and, if you picked one in Settings, presses its Apple CarPlay or Android Auto button. When you hold Reboot radio, it opens the power menu and presses Restart. If auto-fix is on, it checks every few seconds whether your CarPlay app is showing CarPlay, and restarts the app when CarPlay doesn’t come back. It doesn’t save or send anything it sees.</string>
 
     <!-- Settings: the menu -->
     <string name="back">Back</string>
@@ -132,10 +132,10 @@
     <string name="sec_quick_lead">Restart %1$s without coming back to this app.</string>
     <string name="bubble_title">Floating restart button</string>
     <string name="bubble_sub">Floats over %1$s. Tap to restart, drag to move, hold to open this app.</string>
-    <string name="bubble_description">Restart CarPlay. Hold to open CarPlay Restart.</string>
+    <string name="bubble_description">Restart CarPlay. Hold to open Jumpstart.</string>
     <string name="widget_title">Home screen widget</string>
     <string name="widget_sub_add">A Restart button for your home screen, in this look.</string>
-    <string name="widget_sub_manual">Long-press an empty spot on your home screen, open Widgets, and pick CarPlay Restart.</string>
+    <string name="widget_sub_manual">Long-press an empty spot on your home screen, open Widgets, and pick Jumpstart.</string>
     <string name="widget_add">Add</string>
     <string name="widget_add_failed">This home screen can’t add it from here. Add it from its widget list instead.</string>
     <string name="widget_label">Restart</string>
@@ -168,5 +168,5 @@
     <string name="root_yes">Found. Restarts are instant, no helper needed.</string>
     <string name="root_no">Not on this radio. The helper does the tapping instead.</string>
     <string name="root_checking">Checking…</string>
-    <string name="version">CarPlay Restart %1$s · David &amp; Dev</string>
+    <string name="version">Jumpstart %1$s · David &amp; Dev</string>
 </resources>

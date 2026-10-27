@@ -43,7 +43,7 @@
                         android:background="@drawable/bg_orb_small"
                         android:importantForAccessibility="no"
                         android:padding="11dp"
-                        android:src="@drawable/ic_restart"
+                        android:src="@drawable/ic_jumpstart"
                         android:tint="#FFFFFF"
                         android:tag="logo" />
 

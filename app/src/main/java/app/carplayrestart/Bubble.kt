@@ -181,7 +181,7 @@ class BubbleView(context: Context, private val owner: FloatingButton) : View(con
     private val dp = resources.displayMetrics.density
     private val slop = ViewConfiguration.get(context).scaledTouchSlop
     private var theme: AppTheme? = null
-    private val icon: Drawable? = context.getDrawable(R.drawable.ic_restart)?.mutate()
+    private val icon: Drawable? = context.getDrawable(R.drawable.ic_jumpstart)?.mutate()
     private val shadow = Paint(Paint.ANTI_ALIAS_FLAG)
     private val fill = Paint(Paint.ANTI_ALIAS_FLAG)
     private val edge = Paint(Paint.ANTI_ALIAS_FLAG).apply {
